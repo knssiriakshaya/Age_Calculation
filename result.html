@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0f7fa; /* Light blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            padding: 30px;
+            background-color: #f8bbd0; /* Light pink container */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #5d4037; /* Dark brownish text */
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .result h2 {
+            color: #5d4037;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .result .icon {
+            font-size: 48px;
+            color: #f06292; /* Light pink */
+            margin-bottom: 15px;
+        }
+
+        .result span {
+            font-size: 24px;
+            color: #5d4037;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #f06292;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #ec407a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-calendar-check"></i> Your Age Calculation Result</h2>
+        <div class="result" id="result">
+            <div class="icon"><i class="fas fa-birthday-cake"></i></div>
+            <h2>Date of Birth: <span id="dob-result"></span></h2>
+            <h2>Your Age is: <span id="age-result"></span> years</h2>
+            <h2>Days Left until Next Birthday: <span id="days-left-result"></span> days</h2>
+        </div>
+        <button class="btn" onclick="window.location.href='index.html';">Check Age Again</button>
+    </div>
+
+    <script>
+        // Retrieve the date of birth from the query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const dobInput = urlParams.get('dob');
+
+        if (dobInput) {
+            const dob = new Date(dobInput);
+            const currentDate = new Date();
+
+            // Calculate Age
+            let age = currentDate.getFullYear() - dob.getFullYear();
+            const currentMonth = currentDate.getMonth();
+            const currentDay = currentDate.getDate();
+            const dobMonth = dob.getMonth();
+            const dobDay = dob.getDate();
+
+            if (currentMonth < dobMonth || (currentMonth === dobMonth && currentDay < dobDay)) {
+                age--;
+            }
+
+            // Calculate days left until next birthday
+            let nextBirthday = new Date(dob);
+            nextBirthday.setFullYear(currentDate.getFullYear());
+            
+            if (currentDate > nextBirthday) {
+                nextBirthday.setFullYear(currentDate.getFullYear() + 1);
+            }
+
+            const timeDiff = nextBirthday - currentDate;
+            const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+            // Display the results
+            document.getElementById("dob-result").innerText = dobInput;
+            document.getElementById("age-result").innerText = age;
+            document.getElementById("days-left-result").innerText = daysLeft;
+
+            document.getElementById("result").style.display = "block";
+        }
+    </script>
+</body>
+</html>
